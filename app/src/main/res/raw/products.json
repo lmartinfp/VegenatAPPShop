@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "title": "Ajo copos",
+    "description": "Producido a partir de ajo seleccionado, pelado, cortado y deshidratado.",
+    "price": 20.5,
+    "imagelink": "https://www.vegenat.es/wp-content/uploads/2019/03/ajo-copos-1.png"
+  },
+  {
+    "id": 2,
+    "title": "AJO MINCED",
+    "description": "Ajo Minced. Producido a partir de ajo seleccionado, pelado, cortado y deshidratado",
+    "price": 25.7,
+    "imagelink": "https://www.vegenat.es/wp-content/uploads/2019/03/ajo-corte-especial-1.png"
+  },
+  {
+    "id": 3,
+    "title": "Ajo Polvo",
+    "description": "Ajo polvo Agrotécnica. Producido a partir de ajo seleccionado, pelado, cortado y deshidratado.",
+    "price": 18.0,
+    "imagelink": "https://www.vegenat.es/wp-content/uploads/2019/03/ajo-polvo-1.png"
+  },
+  {
+    "id": 4,
+    "title": "Cebolla Eco",
+    "description": "Cebolla ecológica Agrotécnica. Cebolla procedente de agricultura ecológica, cortada y deshidratada.",
+    "price": 40.0,
+    "imagelink": "https://www.vegenat.es/wp-content/uploads/2019/03/cebolla-eco-1.png"
+  },
+  {
+    "id": 5,
+    "title": "Espinaca",
+    "description": "Espinaca deshidratada Agrotécnica. Producido a partir de espinaca lavada, deshidratada y molturada.",
+    "price": 30.0,
+    "imagelink": "https://www.vegenat.es/wp-content/uploads/2019/03/espinaca-1.png"
+  },
+  {
+    "id": 6,
+    "title": "Pimiento Verde",
+    "description": "Pimiento Verde Deshidratado Agrotécnica. Producido a partir de pimiento verde seleccionado, lavado, descorazonado, cortado y deshidratado.",
+    "price": 22.0,
+    "imagelink": "https://www.vegenat.es/wp-content/uploads/2019/03/pimiento-verde-1.png"
+  }
+]

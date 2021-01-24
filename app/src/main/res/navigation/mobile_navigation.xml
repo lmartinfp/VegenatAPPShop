@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_productos">
+
+    <fragment
+        android:id="@+id/nav_productos"
+        android:name="asee.giis.unex.vegenatnavigationdrawer.ui.products.ProductFragment"
+        android:label="@string/menu_productos"
+        tools:layout="@layout/fragment_product_list" />
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="asee.giis.unex.vegenatnavigationdrawer.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_lista_compra"
+        android:name="asee.giis.unex.vegenatnavigationdrawer.ui.lista_compra.ProductShoppingListFragment"
+        android:label="@string/menu_lista_compra"
+        tools:layout="@layout/fragment_product_shopping_list" />
+
+    <fragment
+        android:id="@+id/nav_pedidos"
+        android:name="asee.giis.unex.vegenatnavigationdrawer.ui.pedidos.OrderFragment"
+        android:label="@string/menu_pedidos"
+        tools:layout="@layout/fragment_order_list" />
+
+    <fragment
+        android:id="@+id/nav_preguntasfrecuentes"
+        android:name="asee.giis.unex.vegenatnavigationdrawer.ui.preguntasfrecuentes.PreguntasFrecuentesFragment"
+        android:label="@string/menu_preguntasfrecuentes"
+        tools:layout="@layout/preguntas_frecuentes" />
+
+
+
+
+</navigation>
