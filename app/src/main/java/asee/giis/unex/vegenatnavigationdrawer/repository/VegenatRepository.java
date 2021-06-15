@@ -16,11 +16,13 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import asee.giis.unex.vegenatnavigationdrawer.executor.AppExecutors;
+import asee.giis.unex.vegenatnavigationdrawer.repository.model.local.Comment;
 import asee.giis.unex.vegenatnavigationdrawer.repository.model.local.Order;
 import asee.giis.unex.vegenatnavigationdrawer.repository.model.local.Product;
 import asee.giis.unex.vegenatnavigationdrawer.repository.model.network.ProductNetworkDataSource;
 import asee.giis.unex.vegenatnavigationdrawer.repository.model.local.ProductWithQuantity;
 import asee.giis.unex.vegenatnavigationdrawer.repository.model.local.User;
+import asee.giis.unex.vegenatnavigationdrawer.roomdb.CommentDAO;
 import asee.giis.unex.vegenatnavigationdrawer.roomdb.OrderDAO;
 import asee.giis.unex.vegenatnavigationdrawer.roomdb.ProductDAO;
 import asee.giis.unex.vegenatnavigationdrawer.roomdb.ProductShoppingListDAO;
@@ -42,6 +44,7 @@ public class VegenatRepository {
     private final UserDAO mUserDAO;
     private final ProductShoppingListDAO mProductShoppingListDAO;
     private final OrderDAO mOrderDAO;
+    private final CommentDAO mCommentDAO;
 
     //Fuente de datos remota
     private final ProductNetworkDataSource mProductNetworkDataSource;
@@ -60,9 +63,10 @@ public class VegenatRepository {
     //para devolver resultado en función de la situación de login o registro
     private long res;
 
-    private VegenatRepository(OrderDAO orderDAO, ProductShoppingListDAO productShoppingListDAO,
+    private VegenatRepository(OrderDAO orderDAO, CommentDAO commentDAO, ProductShoppingListDAO productShoppingListDAO,
                               UserDAO UserDAO, ProductDAO ProductDAO, ProductNetworkDataSource productNetworkDataSource) {
         mOrderDAO = orderDAO;
+        mCommentDAO = commentDAO;
         mProductShoppingListDAO = productShoppingListDAO;
         mUserDAO = UserDAO;
         mProductDAO = ProductDAO;
@@ -84,11 +88,11 @@ public class VegenatRepository {
         });
     }
 
-    public synchronized static VegenatRepository getInstance(OrderDAO orderDAO, ProductShoppingListDAO productShoppingListDAO,
+    public synchronized static VegenatRepository getInstance(OrderDAO orderDAO, CommentDAO commentDAO, ProductShoppingListDAO productShoppingListDAO,
                                                              UserDAO userDAO, ProductDAO dao, ProductNetworkDataSource nds) {
         Log.d(LOG_TAG, "Getting the repository");
         if (sInstance == null) {
-            sInstance = new VegenatRepository(orderDAO, productShoppingListDAO, userDAO, dao, nds);
+            sInstance = new VegenatRepository(orderDAO, commentDAO, productShoppingListDAO, userDAO, dao, nds);
             Log.d(LOG_TAG, "Made new repository");
         }
         return sInstance;
@@ -324,6 +328,7 @@ public class VegenatRepository {
 
     /**
      * Checks if we have to update the products data.
+     *
      * @return Whether a fetch is needed
      */
     private boolean isFetchNeeded() {
@@ -331,6 +336,10 @@ public class VegenatRepository {
         lastFetchTimeMillis = lastFetchTimeMillis == null ? 0L : lastFetchTimeMillis;
         long timeFromLastFetch = System.currentTimeMillis() - lastFetchTimeMillis;
         return timeFromLastFetch > MIN_TIME_FROM_LAST_FETCH_MILLIS;
+    }
+
+    public void insertComment(Comment comment) {
+        mCommentDAO.insertComment(comment);
     }
 
 }

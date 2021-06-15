@@ -3,6 +3,7 @@ package asee.giis.unex.vegenatnavigationdrawer.viewmodels;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import asee.giis.unex.vegenatnavigationdrawer.repository.model.local.Comment;
 import asee.giis.unex.vegenatnavigationdrawer.repository.model.local.Product;
 import asee.giis.unex.vegenatnavigationdrawer.repository.model.local.ProductWithQuantity;
 import asee.giis.unex.vegenatnavigationdrawer.repository.VegenatRepository;
@@ -40,7 +41,15 @@ public class ProductDetailsActivityViewModel extends ViewModel {
     /**
      * Insertamos un producto con la cantidad elegida en la lista de la compra
      **/
-    public void insertProductShoppingList (ProductWithQuantity productWithQuantity) {
+    public void insertProductShoppingList(ProductWithQuantity productWithQuantity) {
         vegenatRepository.addProductSoppingList(productWithQuantity);
     }
+
+    /**
+     * Insertamos un comentario con su texto y su puntuacion
+     **/
+    public void insertComment(Comment comment) {
+        vegenatRepository.insertComment(comment);
+    }
+
 }

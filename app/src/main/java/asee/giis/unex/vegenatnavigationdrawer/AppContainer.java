@@ -44,8 +44,8 @@ public class AppContainer {
         productNetworkDataSource = ProductNetworkDataSource.getInstance(); //instanciamos el product network para descargar los productos de la API
 
         //Instanciamos el vegenatRepository con todos los DAO's para acceder de la base de datos instanciada y el productNetwork
-        vegenatRepository = VegenatRepository.getInstance(vegenatDatabase.getOrderDAO(), vegenatDatabase.getProductShoppingListDAO(),
-                                                          vegenatDatabase.getUserDAO(), vegenatDatabase.getProductDAO(), productNetworkDataSource);
+        vegenatRepository = VegenatRepository.getInstance(vegenatDatabase.getOrderDAO(), vegenatDatabase.getCommentDAO(), vegenatDatabase.getProductShoppingListDAO(),
+                vegenatDatabase.getUserDAO(), vegenatDatabase.getProductDAO(), productNetworkDataSource);
 
         //Creamos los factories (le tenemos que pasar a todas el Repository para poder acceder a los datos)
         factoryProductFragmentFactory = new ProductFragmentViewModelFactory(vegenatRepository);

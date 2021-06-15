@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,25 +23,29 @@ import asee.giis.unex.vegenatnavigationdrawer.executor.AppExecutors;
 import asee.giis.unex.vegenatnavigationdrawer.R;
 import asee.giis.unex.vegenatnavigationdrawer.MyApplication;
 import asee.giis.unex.vegenatnavigationdrawer.glide_adapter.ImageAdapter;
+import asee.giis.unex.vegenatnavigationdrawer.repository.model.local.Comment;
 import asee.giis.unex.vegenatnavigationdrawer.repository.model.local.ProductWithQuantity;
 import asee.giis.unex.vegenatnavigationdrawer.viewmodels.ProductDetailsActivityViewModel;
 
 
-public class ProductDetailsActivity extends AppCompatActivity {
+ public class ProductDetailsActivity extends AppCompatActivity {
 
-    private TextView titleTV, descriptionTV, priceTV;
-    private ImageView imagen;
-    private String username;
-    private EditText quantity;
+     private int id;
+     private TextView titleTV, descriptionTV, priceTV;
+     private ImageView imagen;
+     private String username;
+     private EditText quantity;
+     private EditText comentario;
+     private RatingBar score;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_detail);
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_product_detail);
 
-        //Obtenemos la toolbar
-        Toolbar toolbar = findViewById(R.id.toolbarDetails);
-        setSupportActionBar(toolbar);
+         //Obtenemos la toolbar
+         Toolbar toolbar = findViewById(R.id.toolbarDetails);
+         setSupportActionBar(toolbar);
 
         //Le ponemos el título
         getSupportActionBar().setTitle("Información del producto");
@@ -60,7 +65,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         //Obtenemos el id del bundle
-        int id = bundle.getInt("id");
+         id = bundle.getInt("id");
 
         AppContainer appContainer = ((MyApplication) getApplication()).appContainer;
         ProductDetailsActivityViewModel mVM = new ViewModelProvider(this,
@@ -77,27 +82,43 @@ public class ProductDetailsActivity extends AppCompatActivity {
             ImageAdapter.loadUrl(this, product.getImagelink(), imagen);
         });
 
-        //Obtenemos la vista de las undiades
-        quantity = findViewById(R.id.quantity);
+         //Obtenemos la vista de las undiades
+         quantity = findViewById(R.id.quantity);
+         comentario = findViewById(R.id.textoComentario);
+         score = findViewById(R.id.ratingBar);
 
-        //Obtenemos usuario
-        String username = ((MyApplication) getApplication()).appContainer.username;
+         //Obtenemos usuario
+         String username = ((MyApplication) getApplication()).appContainer.username;
 
 
-        //Obtenemos el botón de comprar
-        Button bAccion = findViewById(R.id.accion);
-        if (username == null) { //Compruebo si no hay ningún bundle (no sesión de usuario)
-            //Ocultamos botón y texto para elegir la cantidad
-            LinearLayout layoutCantidad = findViewById(R.id.layoutCantidad);
-            layoutCantidad.setVisibility(View.INVISIBLE);
-        }
-        else { //Compruebo si hay una usuario metido en el bundle (sesión de usuario iniciada)
-            //Si se pulsa el botón de comprar
-            bAccion.setOnClickListener(v -> {
-                insertarElementoEnListaCompra(mVM, v, appContainer);
-            });
-        }
-    }
+         //Obtenemos el botón de comprar
+         Button bAccion = findViewById(R.id.accion);
+         if (username == null) { //Compruebo si no hay ningún bundle (no sesión de usuario)
+             //Ocultamos botón y texto para elegir la cantidad
+             LinearLayout layoutCantidad = findViewById(R.id.layoutCantidad);
+             layoutCantidad.setVisibility(View.INVISIBLE);
+         } else { //Compruebo si hay una usuario metido en el bundle (sesión de usuario iniciada)
+             //Si se pulsa el botón de comprar
+             bAccion.setOnClickListener(v -> {
+                 insertarElementoEnListaCompra(mVM, v, appContainer);
+             });
+         }
+
+         Button insertarComentario = findViewById(R.id.insertarComentario);
+
+         if (username == null) { //Compruebo si no hay ningún bundle (no sesión de usuario)
+             //Ocultamos botón y texto para elegir la cantidad
+             LinearLayout layoutComentarios = findViewById(R.id.layoutComentarios);//Cambiar
+             layoutComentarios.setVisibility(View.INVISIBLE);
+         } else { //Compruebo si hay una usuario metido en el bundle (sesión de usuario iniciada)
+             //Si se pulsa el botón de insertar comentario
+             insertarComentario.setOnClickListener(v -> {
+                 insertarElementoEnListaComentarios(mVM, v, appContainer);
+             });
+         }
+
+
+     }
 
     /**
      * Método que inserta un elemento en la lista de la compra haciendo una serie de comprobaciones
@@ -120,12 +141,37 @@ public class ProductDetailsActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Método para el menú de la ActionBar
-     **/
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
+     /**
+      * Método que inserta un elemento en la lista de la compra haciendo una serie de comprobaciones
+      **/
+     private void insertarElementoEnListaComentarios(ProductDetailsActivityViewModel mVM, View v, AppContainer appContainer) {
+         if (comentario.getText().toString().isEmpty() || score == null) { //Si el cuadro de texto de los comentarios está vacío
+             Snackbar.make(v, "Introduce un comentario y una valoración", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+         } else {
+             String textoComentario = comentario.getText().toString();
+             int puntuacion = score.getNumStars();
+             //Insertamos en el Repository a través del VM la fila del producto en la base de datos
+             long id_user = appContainer.id_user;
+             Comment c = new Comment(id, id_user, textoComentario, puntuacion);
 
-}
+
+             AppExecutors.getInstance().diskIO().execute(() ->
+                     mVM.insertComment(c));
+             runOnUiThread(() -> {
+                 ProductDetailsActivity.this.finish();
+                 Toast.makeText(this, "El comentario se ha añadido correctamente", Toast.LENGTH_LONG).show();
+             });
+
+
+         }
+     }
+
+     /**
+      * Método para el menú de la ActionBar
+      **/
+     @Override
+     public boolean onOptionsItemSelected(MenuItem item) {
+         return super.onOptionsItemSelected(item);
+     }
+
+ }

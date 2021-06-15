@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0c424bce354adb1f925743b4dac65e45",
+    "identityHash": "ffc6109ddfafed767a9d6b314b00fea1",
     "entities": [
       {
         "tableName": "user",
@@ -207,12 +207,60 @@
           }
         ],
         "foreignKeys": []
+      },
+      {
+        "tableName": "comment",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id_product` INTEGER NOT NULL, `id_user` INTEGER NOT NULL, `text` TEXT, `score` INTEGER NOT NULL, PRIMARY KEY(`id_product`))",
+        "fields": [
+          {
+            "fieldPath": "id_product",
+            "columnName": "id_product",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id_user",
+            "columnName": "id_user",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "text",
+            "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "score",
+            "columnName": "score",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id_product"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_comment_id_product_id_user",
+            "unique": true,
+            "columnNames": [
+              "id_product",
+              "id_user"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_comment_id_product_id_user` ON `${TABLE_NAME}` (`id_product`, `id_user`)"
+          }
+        ],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0c424bce354adb1f925743b4dac65e45')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ffc6109ddfafed767a9d6b314b00fea1')"
     ]
   }
 }
